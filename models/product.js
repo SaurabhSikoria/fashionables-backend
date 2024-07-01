@@ -34,6 +34,18 @@ const productSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
+    ratings: [
+      {
+        user: { type: mongoose.ObjectId, ref: "User" },
+        rating: {
+          type: Number,
+          min: 1,
+          max: 5,
+          required: true,
+        },
+        comment: { type: String, trim: true },
+      },
+    ],
   },
   {
     timestamps: true,

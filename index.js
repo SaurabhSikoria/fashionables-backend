@@ -7,7 +7,8 @@ require("dotenv").config();
 
 mongoose
   .connect(process.env.DATABASE)
-  .then(() => console.log("DATABASE CONNECTED"));
+  .then(() => console.log("DATABASE CONNECTED"))
+  .catch((err) => console.log(`DATABASE NOT CONNECTED DUE TO: ${err}`));
 
 const port = 8000;
 

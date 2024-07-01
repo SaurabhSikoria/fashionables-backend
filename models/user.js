@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { randomUUID } = crypto;
 
+const addressSchema = new mongoose.Schema({
+  street: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  postalCode: { type: String, required: true },
+  country: { type: String, required: true },
+});
+
 const userSchema = new mongoose.Schema(
   {
     firstname: {
@@ -21,10 +29,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
-    // about: {
-    //   type: String,
-    //   trim: true,
-    // },
+    address: [addressSchema],
     encry_password: {
       type: String,
     },
@@ -33,6 +38,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    verificationToken: String,
+    isVerified: { type: Boolean, default: false },
+    isBlocked: { type: Boolean, default: false },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
     purchases: {
       type: Array,
       default: [],
@@ -42,7 +52,7 @@ const userSchema = new mongoose.Schema(
         product: {
           type: mongoose.ObjectId,
           ref: "Product",
-          unique: true,
+          required: true,
         },
         quantity: {
           type: Number,

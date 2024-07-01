@@ -14,8 +14,14 @@ const orderSchema = new mongoose.Schema(
   {
     products: [
       {
-        type: mongoose.ObjectId,
-        ref: "Product",
+        product: {
+          type: mongoose.ObjectId,
+          ref: "Product",
+        },
+        // quantity: {
+        //   type: Number,
+        //   default: 1,
+        // },
       },
     ],
     transaction_id: String,
@@ -23,8 +29,8 @@ const orderSchema = new mongoose.Schema(
     address: String,
     status: {
       type: String,
-      default: "Recieved",
-      enum: ["Cancelled", "Delievered", "Shipped", "Recieved"],
+      default: "recieved",
+      enum: ["cancelled", "delivered", "shipped", "pending"],
     },
     updated: Date,
     user: {

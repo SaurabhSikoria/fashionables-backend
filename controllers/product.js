@@ -66,15 +66,31 @@ exports.createProduct = (req, res) => {
   });
 };
 
-exports.getAllProducts = (req, res) => {
-  Product.find()
-    .then((data) => res.json(data))
-    .catch((err) =>
-      res.status(400).json({
-        error: "No Product Found",
-        err,
-      })
-    );
+exports.getAllProducts = async (req, res) => {
+  try {
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 20;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / limit);
+    Product.find()
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .then((data) =>
+        res.json({ products: data, totalPages, currentPage: page })
+      )
+      .catch((err) =>
+        res.status(400).json({
+          error: "Unable to fetch Product!",
+          err,
+        })
+      );
+  } catch (error) {
+    res.status(400).json({
+      error: "No Product Found",
+      err,
+    });
+  }
 };
 
 exports.getOneProduct = (req, res) => res.json(req.product);
